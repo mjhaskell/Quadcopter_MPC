@@ -1,0 +1,52 @@
+# Produced by CVXGEN, 2018-06-29 19:19:42 -0400.
+# CVXGEN is Copyright (C) 2006-2017 Jacob Mattingley, jem@cvxgen.com.
+# The code in this file is Copyright (C) 2006-2017 Jacob Mattingley.
+# CVXGEN, or solvers produced by CVXGEN, cannot be used for commercial
+# applications without prior written permission from Jacob Mattingley.
+
+# Filename: description.cvxgen.
+# Description: A description of the CVXGEN problem.
+
+dimensions
+  m = 4   # number of inputs
+  n = 12   # number of states
+  T = 10  # time horizon
+end
+
+parameters
+  # State-space matrices
+  A (n,n)
+  B (n,m)
+
+  # Weights
+  Wy (n,n) diagonal psd         # Q - weights on states
+  Wy_final (n,n) diagonal psd   # Q_final
+  Wu (m,m) diagonal psd         # R - weights on inputs
+
+  # Initial condition
+  x[0] (n)
+
+  # Reference command
+  x_des[i] (n), i=0..T+1
+  u_des[i] (m), i=0..T
+
+  # Input saturation limits
+  u_max nonnegative
+  u_min nonnegative
+
+  # Slew rate limit
+  #S nonnegative
+end
+
+variables
+  x[k] (n), k=1..T+1    # states
+  u[k] (m), k=0..T      # inputs
+end
+
+minimize
+  sum[k=0..T](quad(x[k]-x_des[k],Wy) + quad(u[k]-u_des[k],Wu)) + quad(x_des[T+1]-x[T+1],Wy_final)
+subject to
+  x[k+1] == A*x[k] + B*(u[k]-u_des[k]), k=0..T      # Dynamic constraints + x_des[k]
+  u_min <= u[k] <= u_max, k=0..T         # saturate inputs
+  #norminf(u[t+1] - u[t]) <= S, t=0..T-1  # slew rate constraint.
+end
