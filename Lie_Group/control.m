@@ -1,21 +1,27 @@
-function out = control(in,P)
+function out = new_control(in,P)
 persistent dt_prev
 
 pn_r = in(1);
 pe_r = in(2);
 h_r  = in(3);
 psi_r = in(4);
-x_k = in(5:16);
-t = in(17);
+
+p_k = in(5:7);
+R_k = reshape(in(8:16),3,3); % Rb2v
+v_k = in(17:19);
+w_k = in(20:22);
+% x_k = [in(5);in(6);in(7);in(8);in(9);in(10);in(11);in(12);in(13);in(14);in(15);in(16)];
+t = in(23);
 
 if t==0,dt_prev = []; end
 
-PHI = [in(8);in(9);in(10)];
-Rb2v = expm(skew(PHI));
 R_des = rotz(psi_r);
-PHI_r = vex(logm(R_des));
+PHI_k = vex(logm(R_des'*R_k));
+% PHI_k = 0.5*vex(R_des'*R_k-R_k'*R_des);%.*w_k;
 
-r = [pn_r;pe_r;h_r;PHI_r;0;0;0;0;0;0];
+x_k = [p_k;PHI_k;v_k;w_k];
+
+r = [pn_r;pe_r;h_r;0;0;0;0;0;0;0;0;0];
 % if dt < .01
 %     dt_prev = [dt_prev;dt(6)];
 %     figure(2)
@@ -27,7 +33,7 @@ r = [pn_r;pe_r;h_r;PHI_r;0;0;0;0;0;0];
 
 % params.A = P.Ad;
 
-params.A = getA(Rb2v,[in(11);in(12);in(13)],P);
+params.A = getA(R_k,v_k,w_k,P);
 params.B = P.Bd;
 
 params.u_des_0 = P.Fe;
@@ -71,22 +77,20 @@ params.u_max = 1;
 params.u_min = 0;
 params.x_0 = x_k;
 
-% Weights for static A
-% params.S = 100*0;
-% params.Wu = diag(0.1*[1,1,1,1]);
-% params.Wy = diag([2,2,30, 10,10,1, 2,2,15, 75,75,1]);
-% params.Wy_final = diag([5,5,50, 10,10,1, 10,10,20, 100,100,1]);
+% Current gains for simple A
+% params.Wu = diag(1*[1,1,1,1]);
+% params.Wy = diag([18,18,250, .01,.01,20, 30.75,30.75,15, .1,.1,1]);
+% params.Wy_final = diag([50,50,100, .1,.1,2, 60,60,115, 1,1,2]);
 
-% Weights for dynamic A
-% params.S = 100*0;
-% params.Wu = diag(0.1*[1,1,1,1]);
-% params.Wy = diag([1.5,1.5,20, 1,1,1, 2,2,2, 50,50,1.5]);
-% params.Wy_final = diag([5,5,50, 10,10,1, 10,10,20, 100,100,100]);
-% params.Wy_final = params.Wy;
+% Current gains for more complex A
+params.Wu = diag(1*[1,1,1,1]);
+params.Wy = diag([20,20,250, .01,.01,15, 30.75,30.75,15, .1,.1,1.1]);
+params.Wy_final = diag([50,50,100, .1,.1,2, 60,60,115, 1,1,2]);
 
-params.Wu = diag(0.1*[1,1,1,1]);
-params.Wy = diag([1,1,20, .1,.1,.1, 2,2,3, 15,15,1.5]);
-params.Wy_final = diag([5,5,50, 2,2,2, 10,10,15, 50,50,50]);
+% testing gains for full A
+% params.Wu = diag(1*[1,1,1,1]);
+% params.Wy = diag([18,18,50, .01,.01,50, 25.75,25.75,15, .1,.1,1]);
+% params.Wy_final = diag([50,50,100, .1,.1,2, 60,60,115, 1,1,2]);
 
 % Create a new settings structure, with some example settings.
 settings.verbose = 1;  % disable output of solver progress w/ 0.

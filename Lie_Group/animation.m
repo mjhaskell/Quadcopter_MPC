@@ -1,13 +1,14 @@
-function animation(in,P)
+function new_animation(in,P)
 
     % process inputs to function
     pn       = in(1);
     pe       = in(2);
     h        = in(3);
-    phi      = in(4);
-    theta    = in(5);
-    psi      = in(6);
-    t        = in(7);
+%     phi      = in(4);
+%     theta    = in(5);
+%     psi      = in(6);
+    R        = reshape(in(4:12),3,3);
+    t        = in(13);
     
     % drawing parameters
     d = 1;%P.d;
@@ -41,11 +42,11 @@ function animation(in,P)
         zlabel('Altitude')
         title('Quadcopter Simulation')
         
-        copter_handle = drawCopter(pn,pe,h,phi,theta,psi,d, []);
+        copter_handle = drawCopter(pn,pe,h,R,d, []);
                  
     % at every other time step, redraw ball and beam
     else 
-        drawCopter(pn,pe,h,phi,theta,psi,d,copter_handle);
+        drawCopter(pn,pe,h,R,d,copter_handle);
     end
 end
 
@@ -56,7 +57,7 @@ end
 % return handle if last argument is empty, otherwise use last arg as handle
 %=======================================================================
 %
-function handle = drawCopter(pn,pe,h,phi,theta,psi,d,handle)
+function handle = drawCopter(pn,pe,h,R2v,d,handle)
   X = [0, d, 0, -d, 0];
   Y = [0, 0, d, 0, -d];
   Z = [0, 0, 0, 0, 0];
@@ -64,7 +65,7 @@ function handle = drawCopter(pn,pe,h,phi,theta,psi,d,handle)
   
   R2m = rot(0,0,pi);
 %   R2v = rot(psi,theta,phi);
-  R2v = expm(skew([phi;theta;psi]));
+%   R2v = expm(skew([phi;theta;psi]));
   R = R2m*R2v;
   P = R*P + R2m*[pn;pe;-h];
   
