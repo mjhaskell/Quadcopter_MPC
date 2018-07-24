@@ -1,4 +1,4 @@
-function out = new_control(in,P)
+function out = control(in,P)
 persistent dt_prev
 
 pn_r = in(1);

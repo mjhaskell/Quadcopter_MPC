@@ -1,4 +1,4 @@
-function new_animation(in,P)
+function animation(in,P)
 
     % process inputs to function
     pn       = in(1);
