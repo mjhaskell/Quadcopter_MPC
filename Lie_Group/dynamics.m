@@ -158,7 +158,7 @@ function sys=mdlDerivatives(t,x,u_in,P)
 %   thetad = q;
 %   psid   = r;
 
-  vd = skew(v)*w - F/(4*mp+mc) + Rb2v'*g - mu*v;
+  vd = skew(v)*w - F/(4*mp+mc) + Rb2v'*g - mu/(4*mp+mc)*v;
   
 %   ud = r*v-q*w - g*sin(theta) - mu/(4*mp+mc)*u;
 %   vd = p*w-r*u + g*cos(theta)*sin(phi) - mu/(4*mp+mc)*v;

@@ -53,7 +53,7 @@ P.ts = t_settle / P.steps;
 clear t_settle
 
 % P.A = [zeros(6),eye(6);[zeros(2,3),[0 -P.g 0;P.g 0 0],-P.mu/P.M*eye(2),zeros(2,4)];zeros(4,12)];P.A(3,9) = -1;
-P.A = [zeros(6),eye(6);zeros(3),-skew([0;0;9.81]),-P.mu/P.M*eye(3),zeros(3);zeros(3,12)];P.A(3,9) = -1;
+P.A = [zeros(6),eye(6);zeros(3),skew([0;0;9.81]),-P.mu/P.M*eye(3),zeros(3);zeros(3,12)];P.A(3,9) = -1;
 P.B = [zeros(8,4);diag([-1/P.M;1/P.Jx;1/P.Jx;1/P.Jz])]*P.MM;
 P.C = eye(length(P.A));
 P.D = zeros(length(P.C(:,1)),length(P.B(1,:)));
