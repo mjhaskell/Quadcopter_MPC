@@ -18,14 +18,6 @@ function animation(in,P)
    
     % first time function is called, initialize plot and persistent vars
     if t==0
-%           phi = 0 * pi/180;
-%           theta = 0 * pi/180;
-%           psi = 45 * pi/180;
-%           d = 1;
-%           pn = -2.5;
-%           pe = -2.5;
-%           h  = 4;
-        
         figure(1), clf;
         view(-45,20)
         hold on
