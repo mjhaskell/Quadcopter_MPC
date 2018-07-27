@@ -15,5 +15,7 @@ This s-function models the plant in Simulink. The inputs are the 4 motor command
 This function animates the quadcopter simulation. The inputs are the current position and attitude of the quadcopter. Handles are used with each plotting object so as to not replot but rather update the objects information. This allows the animation to run faster.
 ### getA.m
 This function is used by the controller to update the A state-space matrix based of the current states. Inside the code are 3 sections which can be used, 2 of which should always be commented out. The 1st section allows you to use a static A matrix based off all true equilibrium values. The 2nd uses the current R as equilibrium and works the best for this simulation. The last section uses the current states (or trajectory states when following a trajectory) as equilibrium. The function returns the updated A matrix.
+### param.m
+This is a file containing a struct of parameters. It contains the properties needed for modeling the quadrotor, the initial conditions for the simulation, and the equilibrium values used for control. This function is called automatically when the play/run button is clicked in Simulink.
 ### All other files
 Any file not previously explained will not be explained due to either simplicity or because it was auto-generated code from CVXGEN.
