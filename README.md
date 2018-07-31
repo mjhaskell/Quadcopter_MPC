@@ -3,6 +3,8 @@ This repo has 2 functional MATLAB simulations of a quadcopter using an MPC contr
 ## Licensing
 This repo uses code gererated from CVXGEN with an academic use only license. CVXGEN is an online code generator for convex optimization. It is used to solve the optimization in the MPC controller.
 ## Dependencies
+I used MATLAB 2018a. To open the simulink files, you must be using MATLAB 2018a or newer.
+
 This repo uses some of the functions from Peter Corke's Robotics Toolbox for MATLAB. It is a pretty simple installation. After downloading the toolbox, open MATLAB, navigate to the directory with the toolbox download, and double-click the toolbox download inside of MATLAB. This with automatically set it up for you. Here is a link to the download: http://petercorke.com/wordpress/toolboxes/robotics-toolbox#Downloading_the_Toolbox
 ## How to Use
 This repo contains 2 directories: Lie_Group and Euler_Angles. Both of these directories contain similar code files and 1 simulink (.slx) file each. The Simulink can be opened within MATLAB and all you should have to do is click run to see the simulation. The reference commands are easily adjustable to fly different paths if desired.
